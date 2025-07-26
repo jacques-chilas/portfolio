@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAC - Elite Builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .sacred-quote {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #ffd700;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffd700;
+            z-index: 1000;
+            animation: slideDown 1s ease-out;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: opacity, transform;
+        }
+
+        section.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section.fade-out {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        .hero {
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0d0d0d 100%);
+            text-align: center;
+            margin-top: 80px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        .profile-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 4px solid #ffd700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+            object-fit: cover;
+            animation: photoGlow 3s ease-in-out infinite alternate;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.1);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .hero p {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 600;
+            color: #cccccc;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-content {
+            text-align: center;
+            max-width: 900px;
+            transform: translateY(40px);
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+        }
+
+        section.fade-in .section-content {
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+        }
+
+        section.fade-in .section-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-text {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 400;
+            color: #e0e0e0;
+            line-height: 1.8;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+        }
+
+        section.fade-in .section-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .spiritual {
+            background: linear-gradient(135deg, #2d1b69 0%, #0d0d0d 100%);
+        }
+
+        .spiritual .section-title {
+            color: #9d4edd;
+        }
+
+        .spiritual-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .spiritual-item {
+            padding: 30px;
+            background: rgba(157, 78, 221, 0.1);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        section.fade-in .spiritual-item {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        section.fade-in .spiritual-item:nth-child(1) { transition-delay: 0.6s; }
+        section.fade-in .spiritual-item:nth-child(2) { transition-delay: 0.7s; }
+        section.fade-in .spiritual-item:nth-child(3) { transition-delay: 0.8s; }
+        section.fade-in .spiritual-item:nth-child(4) { transition-delay: 0.9s; }
+        section.fade-in .spiritual-item:nth-child(5) { transition-delay: 1.0s; }
+
+        .spiritual-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(157, 78, 221, 0.3);
+        }
+
+        .contact {
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a0000 100%);
+        }
+
+        .contact .section-title {
+            color: #ff6b6b;
+        }
+
+        .final-quote {
+            background: #000000;
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 3px solid #ffd700;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .final-quote.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .final-quote p {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 700;
+            color: #ffd700;
+            font-style: italic;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+        }
+
+        .final-quote.fade-in p {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .cta-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000000;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 999;
+            animation: pulse 2s infinite;
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            animation-delay: 2s;
+            animation-fill-mode: forwards;
+        }
+
+        .cta-button.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            }
+            to {
+                text-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            z-index: 999;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.3);
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-dot.active {
+            background: #ffd700;
+            transform: scale(1.5);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .sacred-quote {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+            
+            .hero {
+                margin-top: 60px;
+            }
+            
+            .cta-button {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+
+            .scroll-indicator {
+                display: none;
+            }
+
+            section {
+                transform: translateY(60px);
+            }
+
+            .section-content {
+                transform: translateY(30px);
+            }
+        }
+
+        /* Performance optimizations */
+        section, .section-content, .section-title, .section-text, .spiritual-item {
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sacred-quote">
+        <strong>The difficult gets done immediately. The impossible takes a bit longer. Miracles? By appointment.</strong>
+    </div>
+
+    <div class="scroll-indicator">
+        <div class="scroll-dot active" data-section="0"></div>
+        <div class="scroll-dot" data-section="1"></div>
+        <div class="scroll-dot" data-section="2"></div>
+        <div class="scroll-dot" data-section="3"></div>
+        <div class="scroll-dot" data-section="4"></div>
+        <div class="scroll-dot" data-section="5"></div>
+        <div class="scroll-dot" data-section="6"></div>
+        <div class="scroll-dot" data-section="7"></div>
+        <div class="scroll-dot" data-section="8"></div>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <img src="/assets/media/jc.png" alt="JAC Profile" class="profile-photo">
+            <h1>I AM GOOD AT EVERYTHING.</h1>
+            <p>Tech. Business. War. Women. I build. I lead. I fight. I win.</p>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="section-content">
+                <h2 class="section-title">I BUILD</h2>
+                <p class="section-text">Products, companies, systems from zero to scale. <br>Fast. No tutorials. Just instinct and execution. While others plan, I launch. While they debate, I deliver. I don't build projects, I build empires.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="section-content">
+                <h2 class="section-title">SOFTWARE MASTER</h2>
+                <p class="section-text">Code isn't a job. It's a superpower. Web. Mobile. Backend. Cloud. <br>If it's digital, I own it. I don't follow frameworks. I bend them to my will. The machine speaks my language, and I speak fluently.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="section-content">
+                <h2 class="section-title">LEADER</h2>
+                <p class="section-text">President of AEENI. I don't ask for authority. I embody it. <br>People follow because they feel the unmatched capability. I don't manage, I inspire. I don't command, I ignite. Leadership isn't a title, it's a presence.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="section-content">
+                <h2 class="section-title">ENTREPRENEUR</h2>
+                <p class="section-text">I don't look for a lane. I carve mine into the system. Founder of CODEL. I build ventures like soldiers build empires. Every business is a battlefield, and I come armed with vision, execution, and an unshakeable will to win.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="section-content">
+                <h2 class="section-title">NETWORK</h2>
+                <p class="section-text">I don't collect contacts. I build real alliances. Mentors. Visionaries. Investors. Decision-makers. <br>I move with those who move things. My network isn't what I know, it's who believes in what I build.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="spiritual">
+        <div class="container">
+            <div class="section-content">
+                <h2 class="section-title">SPIRITUAL</h2>
+                <div class="spiritual-grid">
+                    <div class="spiritual-item">
+                        <p>I'm not just logical. I'm guided. I meditate. I listen to instinct.</p>
+                    </div>
+                    <div class="spiritual-item">
+                        <p>God lives in me. The universe aligns with my steps.</p>
+                    </div>
+                    <div class="spiritual-item">
+                        <p>I don't chase, I attract. I speak things into existence.</p>
+                    </div>
+                    <div class="spiritual-item">
+                        <p>Power flows through me and nothing external can touch that.</p>
+                    </div>
+                    <div class="spiritual-item">
+                        <p>🧘🏾‍♂️ Calm. Certain. Chosen.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="section-content">
+                <h2 class="section-title">WARRIOR</h2>
+                <p class="section-text">I was forged in fire. Built for chaos. Competitive by nature. Relentless by choice. Iron-willed. Unshakably principled. The moment I decide, it's already OVER.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="section-content">
+                <h2 class="section-title">UNFAZED</h2>
+                <p class="section-text">Not on LinkedIn. Not in the game for likes. While they post skills, I close deals. While they network online, I build in reality. Social media is noise. Results are music.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact">
+        <div class="container">
+            <div class="section-content">
+                <h2 class="section-title">CONTACT</h2>
+                <p class="section-text">Got something huge to build? Call me. Right now. Be ready to pay. I might be overpriced but I'm worth it. Don't come with problems, come with vision. I turn impossible into inevitable.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="final-quote">
+        <div class="container">
+            <p>"Don't ask what I know. Ask what you need done."</p>
+        </div>
+    </div>
+
+    <a href="#portfolio" class="cta-button">Call me now</a>
+
+    <script>
+        // Enhanced scroll animation system
+        const sections = document.querySelectorAll('section');
+        const finalQuote = document.querySelector('.final-quote');
+        const ctaButton = document.querySelector('.cta-button');
+        const scrollDots = document.querySelectorAll('.scroll-dot');
+        
+        let currentSection = 0;
+        let isScrolling = false;
+
+        // Intersection Observer for smooth animations
+        const observerOptions = {
+            threshold: [0.1, 0.3, 0.5, 0.7],
+            rootMargin: '-10% 0px -10% 0px'
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                const sectionIndex = Array.from(sections).indexOf(entry.target);
+                
+                if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+                    // Fade in current section
+                    entry.target.classList.add('fade-in');
+                    entry.target.classList.remove('fade-out');
+                    
+                    // Update scroll indicator
+                    updateScrollIndicator(sectionIndex);
+                    
+                    // Show CTA button after first few sections
+                    if (sectionIndex >= 2 && !ctaButton.classList.contains('show')) {
+                        ctaButton.classList.add('show');
+                    }
+                } else if (entry.intersectionRatio < 0.1) {
+                    // Fade out section when it's mostly out of view
+                    entry.target.classList.remove('fade-in');
+                    entry.target.classList.add('fade-out');
+                }
+            });
+        }, observerOptions);
+
+        // Observer for final quote
+        const finalQuoteObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+                    entry.target.classList.add('fade-in');
+                } else {
+                    entry.target.classList.remove('fade-in');
+                }
+            });
+        }, { threshold: [0.3, 0.7] });
+
+        // Initialize observers
+        sections.forEach((section) => {
+            sectionObserver.observe(section);
+        });
+        finalQuoteObserver.observe(finalQuote);
+
+        // Update scroll indicator
+        function updateScrollIndicator(activeIndex) {
+            scrollDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === activeIndex);
+            });
+            currentSection = activeIndex;
+        }
+
+        // Scroll indicator click handlers
+        scrollDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                if (index < sections.length) {
+                    sections[index].scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            });
+        });
+
+        // Enhanced smooth scrolling with momentum
+        let lastScrollTop = 0;
+        let scrollTimeout;
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollDirection = scrollTop > lastScrollTop ? 'down' : 'up';
+            
+            // Clear existing timeout
+            clearTimeout(scrollTimeout);
+            
+            // Add momentum-based delays for smoother animation
+            scrollTimeout = setTimeout(() => {
+                isScrolling = false;
+            }, 150);
+            
+            isScrolling = true;
+            lastScrollTop = scrollTop;
+        }, { passive: true });
+
+        // CTA button functionality
+        ctaButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Portfolio coming soon. Direct contact available.');
+        });
+
+        // Performance optimization: Reduce animation complexity on mobile
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.spiritual-item').forEach((item, index) => {
+                item.style.transitionDelay = `${0.1 * index}s`;
+            });
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' && currentSection < sections.length - 1) {
+                sections[currentSection + 1].scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            } else if (e.key === 'ArrowUp' && currentSection > 0) {
+                sections[currentSection - 1].scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        });
+
+        // Initialize first section as visible
+        setTimeout(() => {
+            if (sections[0]) {
+                sections[0].classList.add('fade-in');
+            }
+        }, 500);
+
+        // Preload critical images for better performance
+        const preloadImage = (src) => {
+            const img = new Image();
+            img.src = src;
+        };
+    </script>
+</body>
+</html>
