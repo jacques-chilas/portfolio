@@ -419,7 +419,7 @@
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false">
     <div class="sacred-quote">
         <strong>The difficult gets done immediately. The impossible takes a bit longer. Miracles? By appointment.</strong>
     </div>
@@ -699,5 +699,31 @@
             img.src = src;
         };
     </script>
+    <script>
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Optional: Also disable F12, Ctrl+Shift+I, Ctrl+U
+        document.addEventListener('keydown', function(e) {
+            // Disable F12
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            // Disable Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+                e.preventDefault();
+                return false;
+            }
+            // Disable Ctrl+U
+            if (e.ctrlKey && e.keyCode === 85) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        </script>
 </body>
 </html>
